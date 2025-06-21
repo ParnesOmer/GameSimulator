@@ -1,0 +1,4 @@
+C:\Users\Admin\AppData\Local\JetBrains\CLion2024.3\cygwin_cmake\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/cygdrive/c/Users/Admin/AppData/Local/Programs/CLion/bin/ninja/cygwin/x64/ninja.exe -G Ninja -S /cygdrive/c/Users/Admin/Desktop/GameSimulator -B /cygdrive/c/Users/Admin/Desktop/GameSimulator/cmake-build-debug
+-- Configuring done (0.3s)
+-- Generating done (0.3s)
+-- Build files have been written to: /cygdrive/c/Users/Admin/Desktop/GameSimulator/cmake-build-debug
