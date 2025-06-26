@@ -1,10 +1,18 @@
-#include "View.h"
-#include "Model.h"
+//
+// Created by omer on 6/23/2025.
+//
 
+#ifndef GAMESIMULATOR_CONTRILLER_HPP
+#define GAMESIMULATOR_CONTRILLER_HPP
+#include <iostream>
+#include <vector>
+#include "Model.hpp"
+#include "Exceptions.hpp"
 
-/* Controller
-This class is responsible for controlling the Model and View according to interactions
-with the user.
+/**
+ * Controller
+ * This class is responsible for controlling the Model and View according to interactions
+ * with the user.
 */
 
 class Controller {
@@ -12,9 +20,13 @@ public:
 	Controller();
 	~Controller();
 
-	// creates View object, runs the program by accepting user commands, then destroys View object
-	void run();
+  void parseArguments(int argc, char* argv[]);
+  void executeCommand(const std::string &line);
 
-private:
-	View* view_ptr;
+	/// creates View object, runs the program by accepting user commands, then destroys View object
+	void run(int argc, char **argv);
+
+private
 };
+
+#endif //GAMESIMULATOR_CONTRILLER_HPP
