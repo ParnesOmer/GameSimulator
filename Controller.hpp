@@ -14,19 +14,19 @@
  * This class is responsible for controlling the Model and View according to interactions
  * with the user.
 */
+
 class Controller {
 public:	
 	Controller();
 	~Controller();
 
-    void parseArguments(int argc, char* argv[]);
-    void executeCommand(const std::string &line);
+  void parseArguments(int argc, char* argv[]);
+  void executeCommand(const std::string &line);
 
-	// creates View object, runs the program by accepting user commands, then destroys View object
+	/// creates View object, runs the program by accepting user commands, then destroys View object
 	void run(int argc, char **argv);
 
-private:
-//	View* view_ptr;
+private
 };
 
 #endif //GAMESIMULATOR_CONTRILLER_HPP

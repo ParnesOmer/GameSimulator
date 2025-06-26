@@ -13,7 +13,7 @@ typedef struct Point {
 	Point(double x, double y);
 	Point();
 	void print() const;
-	bool operator==(const Point& rhs);
+	bool operator==(const Point& rhs) const;
 } Point;
 struct Polar_vector;
 typedef struct Cartesian_vector {
