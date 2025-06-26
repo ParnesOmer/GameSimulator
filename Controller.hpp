@@ -1,3 +1,7 @@
+#include "View.h"
+#include "Model.h"
+
+
 /* Controller
 This class is responsible for controlling the Model and View according to interactions
 with the user.
