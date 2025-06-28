@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vector>
 #include "Model.hpp"
+#include "truckTrip.hpp"
 #include "Exceptions.hpp"
 
 /**

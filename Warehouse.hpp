@@ -12,6 +12,7 @@ class Warehouse : public Sim_obj {
 
         const Point& getPosition() const override;
         std::string getState() const override;
+
         std::string BroadcastState() const override;
         void update() override;
 
