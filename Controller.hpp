@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vector>
 #include "Model.hpp"
+#include "truckTrip.h"
 #include "Exceptions.hpp"
 
 /**
@@ -26,7 +27,7 @@ public:
 	/// creates View object, runs the program by accepting user commands, then destroys View object
 	void run(int argc, char **argv);
 
-private
+private:
 };
 
 #endif //GAMESIMULATOR_CONTRILLER_HPP

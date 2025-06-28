@@ -45,6 +45,13 @@ void Controller::parseArguments(int argc, char **argv) {
     // Create the warehouses objects in the model
     model.createWarehouse(warehouses);
 
+    // Analyze the truck files
+    for (const auto &truckFile : truckFiles) {
+        std::vector<truckTrip> trucks = model.setTruckFile(truckFile);
+        // Create the trucks objects in the model
+        model.createTruck(trucks);
+    }
+
 }
 
 void Controller::run(int argc, char **argv) {
@@ -68,12 +75,15 @@ void Controller::run(int argc, char **argv) {
 }
 
 void Controller::executeCommand(const std::string &line) {
+    Model &model = Model::getInstance();
     if(line == "exit") {
         std::cout << "Exiting the game simulator." << std::endl;
         exit(0);
     } else if (line == "print") {
         // Here you would call a method to print the current state of the model
         std::cout << "Printing current state..." << std::endl;
+        model.printWarehouses();
+        model.printTrucks();
     } else {
         // Handle other commands, e.g., loading data, processing input, etc.
         std::cout << "Executing command: " << line << std::endl;
