@@ -12,7 +12,7 @@
 #include <unordered_map>
 #include "Exceptions.hpp"
 #include "Warehouse.hpp"
-#include "truckTrip.h"
+#include "truckTrip.hpp"
 
 class Model {
 public:
