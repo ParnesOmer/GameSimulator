@@ -25,6 +25,7 @@ std::string vehicleStateToString(VehicleState state) {
 class Vehicle : public Sim_obj {
     public:
         Vehicle(std::string obj_name, VehicleState state=VehicleState::STOPPED): Sim_obj(obj_name), trackbase(Trackbase()), state(state) {};
+        Vehicle(std::string obj_name, double x, double y, VehicleState state=VehicleState::STOPPED): Sim_obj(obj_name), trackbase(Trackbase(x, y)), state(state) {};
 
         virtual ~Vehicle() = default;
         Vehicle(const Vehicle& other) = default;
