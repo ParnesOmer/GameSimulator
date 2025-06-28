@@ -58,4 +58,11 @@ public:
             : Exception("ERROR opening/reading the specified file.\n") {}
 };
 
+/// Exception in case warehouse not found.
+class WarehouseNotFoundException : public Exception {
+public:
+    explicit WarehouseNotFoundException(const std::string& filename, int line)
+            : Exception("ERROR warehouse does not exist in file " + filename + " at line "+ std::to_string(line) + ".\n") {}
+};
+
 #endif //GAMESIMULATOR_EXCEPTIONS_H

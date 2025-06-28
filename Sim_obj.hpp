@@ -23,9 +23,8 @@ class Sim_obj {
 
         const std::string& getName() const { return name; }
 
-        virtual const std::string& getState() = 0;
-        virtual const Point& getPosition() = 0;
-        virtual const std::string& getCurrentState() const     = 0;
+        virtual std::string getState() const = 0;
+        virtual const Point& getPosition() const = 0;
         virtual void update() = 0;
 
     private:

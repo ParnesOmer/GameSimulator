@@ -9,7 +9,10 @@
 #include <sstream>
 #include <fstream>
 #include <iostream>
+#include <unordered_map>
 #include "Exceptions.hpp"
+#include "Warehouse.hpp"
+#include "truckTrip.hpp"
 
 class Model {
 public:
@@ -27,15 +30,24 @@ public:
     /// Parses the depot file and returns a vector of tuples containing warehouse data(name, x, y, amount).
     std::vector<std::tuple<std::string, double, double, int>> setDepotFile(const std::string &depotFile) const;
     /// Creates warehouses based on the provided vector of tuples.
-    void createWarehouse(std::vector<std::tuple<std::string, double, double, int>> warehouses) const;
+    void createWarehouse(std::vector<std::tuple<std::string, double, double, int>> warehouses);
+
+    /// Parses the truck file and returns a vector of tuples containing truck data(sourceX, sourceY, destinationX, destinationY, outTime, arrivalTime, crates).
+    std::vector<truckTrip> setTruckFile(const std::string &truckFile);
+    /// Creates trucks based on the provided vector of tuples.
+    void createTruck(std::vector<truckTrip> trucks);
+
+    void printWarehouses() const;
+    void printTrucks() const;
 
 private:
     Model();
     ~Model();
 
     int time = 0;
-
+    std::unordered_map<std::string, Warehouse> warehouses;
     std::vector<std::string> parseLine(const std::string &line) const;
+    void addTripToTruck(std::string source, std::string outTime, std::vector<std::string> columns, vector<truckTrip> &trucks);
 };
 
 #endif //GAMESIMULATOR_MODEL_HPP

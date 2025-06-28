@@ -1,14 +1,11 @@
 #include "Warehouse.hpp"
 
-const Point& Warehouse::getPosition() {
+const Point& Warehouse::getPosition() const {
     return position;
 }
 
-const std::string& Warehouse::getCurrentState() const {
-    return std::to_string(total_crates);
-}
 
-const std::string& Warehouse::getState() {
+std::string Warehouse::getState() const {
     // TODO: Implement
     return std::to_string(total_crates);
 }

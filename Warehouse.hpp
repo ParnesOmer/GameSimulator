@@ -10,9 +10,8 @@ class Warehouse : public Sim_obj {
 
         void addCrates(int crates) { total_crates += crates; }
 
-        const Point& getPosition() override;
-        const std::string& getCurrentState() const override;
-        const std::string& getState() override;
+        const Point& getPosition() const override;
+        std::string getState() const override;
         void update() override;
 
     private:
