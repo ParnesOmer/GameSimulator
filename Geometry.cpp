@@ -64,6 +64,12 @@ void Point::print() const
 	cout << setprecision(2) << "(" << x << ", " << y << ")";
 }
 
+std::string Point::toString() const {
+    std::ostringstream oss;
+    oss << "(" << x << ", " << y << ")";
+    return oss.str();
+}
+
 bool Point::operator==(const Point & rhs) const
 {
 	return x == rhs.x && y == rhs.y;

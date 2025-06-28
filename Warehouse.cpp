@@ -1,12 +1,17 @@
 #include "Warehouse.hpp"
+#include <sstream>
+#include <iomanip>
 
-const Point& Warehouse::getPosition() {
+const Point& Warehouse::getPosition() const {
     return position;
 }
 
 std::string Warehouse::getState() const {
-    // TODO: Implement
     return std::to_string(total_crates);
+}
+
+std::string Warehouse::BroadcastState() const {
+    return "Warehouse " + getName() + " at position " + position.toString() + ", Inventory: " + std::to_string(total_crates);
 }
 
 void Warehouse::update() {

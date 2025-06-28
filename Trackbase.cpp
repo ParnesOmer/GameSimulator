@@ -1,5 +1,9 @@
 #include "Trackbase.hpp"
 
+void Trackbase::setPosition(double x, double y) {
+    position.x = x;
+    position.y = y;
+}
 
 void Trackbase::setCourse(int course) {
     if (course < 0 || course > 359) {
