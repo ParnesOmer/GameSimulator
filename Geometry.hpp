@@ -1,3 +1,6 @@
+#ifndef GEOMETRY_HPP
+#define GEOMETRY_HPP
+
 #include <iostream>
 #include <iomanip>
 
@@ -30,3 +33,5 @@ typedef struct Polar_vector {
 	double r;
 	double theta;
 } Polar_vector;
+
+#endif // GEOMETRY_HPP
