@@ -14,14 +14,12 @@ double to_degrees(double theta_r);
 
 // class declarations
 typedef struct Point {
-    double x;
-    double y;
-
-    Point(double x, double y);
-
-    Point();
-
-    void print() const;
+	double x;
+	double y;
+	Point(double x, double y);
+	Point();
+	void print() const;
+  std::string toString() const;
 
     bool operator==(const Point &rhs) const;
 } Point;
@@ -40,14 +38,12 @@ typedef struct Cartesian_vector {
 
 
 typedef struct Polar_vector {
-    Polar_vector(const Cartesian_vector &cv);
 
-    Polar_vector();
-
-    void operator=(const Cartesian_vector &cv);
-
-    double r;
-    double theta;
+	Polar_vector(const Cartesian_vector & cv);
+	Polar_vector();
+	void operator=(const Cartesian_vector & cv);
+	double r;
+	double theta;
 } Polar_vector;
 
 #endif // GEOMETRY_HPP
