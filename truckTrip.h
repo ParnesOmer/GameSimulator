@@ -1,0 +1,8 @@
+//
+// Created by omer on 6/28/2025.
+//
+
+#ifndef GAMESIMULATOR_TRUCKTRIP_H
+#define GAMESIMULATOR_TRUCKTRIP_H
+
+#endif //GAMESIMULATOR_TRUCKTRIP_H
