@@ -1,7 +1,7 @@
-#include "Sim_obj.hpp"
-
 #ifndef WAREHOUSE_HPP
 #define WAREHOUSE_HPP
+
+#include "Sim_obj.hpp"
 
 class Warehouse : public Sim_obj {
     public:

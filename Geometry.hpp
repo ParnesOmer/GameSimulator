@@ -19,8 +19,8 @@ typedef struct Point {
 	Point(double x, double y);
 	Point();
 	void print() const;
-  std::string toString() const;
-
+  	std::string toString() const;
+	static double distance(const Point& p1, const Point& p2);
     bool operator==(const Point &rhs) const;
 } Point;
 

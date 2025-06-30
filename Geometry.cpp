@@ -12,6 +12,16 @@ double to_degrees(double theta_r) {
     return theta_r * 180.0 / pi;
 }
 
+
+double Point::distance(const Point& p1, const Point& p2) {
+    Cartesian_vector cv;
+    cv.delta_x = p2.x - p1.x;
+    cv.delta_y = p2.y - p1.y;
+    
+    Polar_vector pv(cv);
+    return pv.r;  // r is the distance
+}
+
 // construct a Cartesian_vector from a Polar_vector
 Cartesian_vector::Cartesian_vector(const Polar_vector &pv) {
     delta_x = pv.r * cos(pv.theta);
@@ -72,4 +82,3 @@ std::string Point::toString() const {
 bool Point::operator==(const Point &rhs) const {
     return x == rhs.x && y == rhs.y;
 }
-
