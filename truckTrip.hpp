@@ -3,6 +3,8 @@
 
 #include <string>
 #include "Geometry.hpp"
+#include "Time.hpp"
+
 struct truckTrip {
     Point source;            // Source point
     Point destination;       // Destination point

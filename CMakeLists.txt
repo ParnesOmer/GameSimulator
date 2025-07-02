@@ -11,4 +11,5 @@ add_executable(GameSimulator
                Trackbase.cpp
                Truck.cpp
                Model.cpp
+               Vehicle.cpp
                )
