@@ -13,6 +13,7 @@
 #include "Exceptions.hpp"
 #include "Warehouse.hpp"
 #include "truckTrip.hpp"
+#include "Truck.hpp"
 
 class Model {
 public:
@@ -24,7 +25,8 @@ public:
     void operator=(const Model&) = delete;
 
     //getters and setters
-    int getTime() const;
+    time_t getTime() const;
+    time_t peekTime();
     void incrementTime();
 
     /// Parses the depot file and returns a vector of tuples containing warehouse data(name, x, y, amount).
@@ -44,7 +46,7 @@ private:
     Model();
     ~Model();
 
-    int time = 0;
+    time_t time = 0;
     std::unordered_map<std::string, Warehouse> warehouses;
     std::vector<std::string> parseLine(const std::string &line) const;
     void addTripToTruck(std::string source, std::string outTime, std::vector<std::string> columns, vector<truckTrip> &trucks);

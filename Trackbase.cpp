@@ -1,8 +1,13 @@
 #include "Trackbase.hpp"
+#include <cmath>
 
 void Trackbase::setPosition(double x, double y) {
     position.x = x;
     position.y = y;
+}
+
+void Trackbase::setPosition(const Point& pos) {
+    position = pos;
 }
 
 void Trackbase::setCourse(int course) {
@@ -33,6 +38,18 @@ void Trackbase::setCourse(const Point& destination) {
     }
 }
 
+void Trackbase::setupByTime(time_t leave_time, const Point& destination, time_t arrive_time) {
+    // Calculate the time difference between the leave time and the arrival time
+    time_t time_diff = arrive_time - leave_time;
+    setCourse(destination);
+
+    // Calculate the speed
+    double distance = Point::distance(position, destination);
+    speed = distance / time_diff;
+
+    setSpeed(speed);
+}
+
 void Trackbase::update() {
     if (course == -1 || speed == 0) {
         return;
@@ -48,7 +65,7 @@ void Trackbase::update() {
     
 }
 
-bool Trackbase::is_nearby(const Point& destination, double radius) const {
+bool Trackbase::isNearby(const Point& destination, double radius) const {
     if (position == destination) {
         return true;
     }
@@ -59,21 +76,3 @@ bool Trackbase::is_nearby(const Point& destination, double radius) const {
     Polar_vector polar_v = cartesian_v;
     return polar_v.r <= radius;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
