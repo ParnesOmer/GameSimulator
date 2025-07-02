@@ -1,22 +1,23 @@
 #ifndef TRUCK_HPP
 #define TRUCK_HPP
 
+#include <utility>
 #include <vector>
 #include "Vehicle.hpp"
 #include "truckTrip.hpp"
-
+#include "Model.hpp"
 
 class Truck : public Vehicle {
     public:
-        Truck(std::string obj_name, const Point& pos, const std::vector<truckTrip>& trips): Vehicle(obj_name, pos), trips(trips), trip_index(0){
+        Truck(std::string obj_name, const Point& pos, const std::vector<truckTrip>& trips): Vehicle(std::move(obj_name), pos), trips(trips), trip_index(0){
             setupTruck();
         };
-        Truck(std::string obj_name, const Point& pos, int crates): Vehicle(obj_name, pos), trips(std::vector<truckTrip>()), trip_index(0), crates(crates) {};
+        Truck(std::string obj_name, const Point& pos, int crates): Vehicle(std::move(obj_name), pos), trips(std::vector<truckTrip>()), trip_index(0), crates(crates) {};
         Truck(const Truck& other) = default;
         Truck& operator=(const Truck& other) = default;
         Truck(Truck&& other) = default;
         Truck& operator=(Truck&& other) = default;
-        ~Truck() = default;
+        ~Truck() override = default;
 
         void loadTrip();
         void moveToNextTrip();
@@ -32,8 +33,9 @@ class Truck : public Vehicle {
         int trip_index;
         std::vector<truckTrip> trips;
         int crates;
-        std::string destination_warehouse;
         DestinationType destination_type;
+        truckTrip current_trip;
+
 
         void countCrates();
         void setupTruck();

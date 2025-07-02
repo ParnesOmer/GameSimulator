@@ -76,7 +76,7 @@ void Controller::run(int argc, char **argv) {
 
 void Controller::executeCommand(const std::string &line) {
     Model &model = Model::getInstance();
-    if(line == "exit") {
+    if (line == "exit") {
         std::cout << "Exiting the game simulator." << std::endl;
         exit(0);
     } else if (line == "print") {

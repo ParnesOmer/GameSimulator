@@ -4,11 +4,18 @@
 #include "Geometry.hpp"
 #include "Time.hpp"
 
+const int NO_COURSE = -1;
+const int NO_SPEED = 0;
+const int SECONDS_PER_MINUTE = 60;
+const int SECONDS_PER_HOUR = 3600;
+const int MINUTES_PER_HOUR = 60;
+const int DEFAULT_UPDATE_TIME = SECONDS_PER_HOUR;
+
 class Trackbase {
     public:
-        Trackbase(): position(Point(0, 0)), course(-1), speed(0) {};
-        Trackbase(double x, double y): position(Point(x, y)), course(-1), speed(0) {};
-        Trackbase(const Point& pos): position(pos), course(-1), speed(0) {};
+        Trackbase(): position(Point(0, 0)), course(NO_COURSE), speed(NO_SPEED) {};
+        Trackbase(double x, double y): position(Point(x, y)), course(NO_COURSE), speed(NO_SPEED) {};
+        Trackbase(const Point& pos): position(pos), course(NO_COURSE), speed(NO_SPEED) {};
         ~Trackbase() = default;
 
         // Getters
@@ -26,15 +33,15 @@ class Trackbase {
         // Setup Speed and Course by Time and Destination point.
         void setupByTime(time_t leave_time, const Point& destination, time_t arrive_time);
 
-        // Update position
-        void update();
+        // Update position with time factor (default 60 minutes)
+        void update(int time_factor_minutes = DEFAULT_UPDATE_TIME);
 
         bool isNearby(const Point& destination, double radius) const;
 
     private:
         Point position;
         int course;
-        int speed;
+        int speed;  // km/h
 };
 
 #endif // TRACKBASE_HPP

@@ -22,9 +22,7 @@ void Truck::setTrips(const std::vector<truckTrip>& trips) {
 
 void Truck::loadTrip() {
     if (trip_index < trips.size()) {
-        truckTrip currentTrip = trips[trip_index];
-        trackbase.setupByTime(currentTrip.outTime, currentTrip.destination, currentTrip.arrivalTime);
-        destination_warehouse = currentTrip.destinationWarehouse;
+        trackbase.setupByTime(current_trip.outTime, current_trip.destination, current_trip.arrivalTime);
         destination_type = DestinationType::WAREHOUSE;
     }
 }
@@ -48,12 +46,60 @@ const truckTrip& Truck::getCurrentTrip() const {
 }
 
 void Truck::update() {
-    // need to pay attention that the truck is starting shipment at specified leave_time, on first
-    // tick of movement, set it to moving, after last tick of moving set it to parked.
-    // need to add set state.
-    // need to think about update logic, whether its before tick or after.
-    // need to check if it will reach its warehouse, calculate speeds and time of leave to check if continue to move or not.
+    time_t current_time = Model::getInstance().getTime();
+    time_t next_time = Model::getInstance().peekNextTime();
+    
+    if (state == VehicleState::OFFROAD || state == VehicleState::PARKED) {
+        return;
+    }
 
+    // Check if it's time to start the current trip
+    if (state == VehicleState::STOPPED && current_trip.outTime <= next_time) {
+        state = VehicleState::MOVING;
+    }
+
+    // If we're moving, process trips
+    if (state == VehicleState::MOVING) {
+        // Process trips while we have time and trips remaining
+        while (trip_index < trips.size()) {
+            // Check if we can start this trip
+            if (current_trip.outTime <= next_time) {
+                // Setup speed and course for this specific trip segment
+                trackbase.setupByTime(current_trip.outTime, current_trip.destination, current_trip.arrivalTime);
+                
+                // Calculate how much of this trip we can complete
+                time_t trip_duration = current_trip.arrivalTime - current_trip.outTime;
+                time_t driving_time = 0;
+                
+                if (current_trip.arrivalTime <= next_time) {
+                    // We can complete the entire trip
+                    driving_time = trip_duration;
+                    
+                    // Update position for the full trip
+                    trackbase.update(driving_time);
+                    
+                    // Move to next trip using class function
+                    moveToNextTrip();
+                    
+                    // Check if we moved to next trip or parked
+                    if (state == VehicleState::PARKED) {
+                        break; // No more trips
+                    }
+                } else {
+                    // We can only complete part of this trip
+                    driving_time = next_time - current_trip.outTime;
+                    
+                    // Update position for the partial trip
+                    trackbase.update(driving_time);
+                    
+                    break;
+                }
+            } else {
+                // Can't start this trip yet, wait
+                break;
+            }
+        }
+    }
 }
 
 std::string Truck::BroadcastState() const {
@@ -62,7 +108,7 @@ std::string Truck::BroadcastState() const {
     if (state == "MOVING") {
         oss << "Truck " << getName() << " at " << getPosition().toString();
         if (destination_type == DestinationType::WAREHOUSE) {
-            oss << ", Heading to " << destination_warehouse;
+            oss << ", Heading to " << current_trip.destinationWarehouse;
         }
         
         oss << ", Crates: " << crates;

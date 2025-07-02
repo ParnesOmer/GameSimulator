@@ -14,6 +14,7 @@
 #include "Warehouse.hpp"
 #include "truckTrip.hpp"
 #include "Truck.hpp"
+#include "Trackbase.hpp"
 
 class Model {
 public:
@@ -26,7 +27,7 @@ public:
 
     //getters and setters
     time_t getTime() const;
-    time_t peekTime();
+    time_t peekNextTime();
     void incrementTime();
 
     /// Parses the depot file and returns a vector of tuples containing warehouse data(name, x, y, amount).

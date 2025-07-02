@@ -13,9 +13,9 @@ Model::Model() = default;
 
 Model::~Model()  = default;
 
-void Model::incrementTime() { time += 3600; }
+void Model::incrementTime() { time += SECONDS_PER_HOUR; }
 time_t Model::getTime() const { return time; }
-time_t Model::peekTime() { return time + 3600; }
+time_t Model::peekNextTime() { return time + SECONDS_PER_HOUR; }
 
 
 std::vector<std::string> Model::parseLine(const std::string &line) const {
@@ -199,7 +199,7 @@ void Model::createTruck(std::vector<truckTrip> trucks) {
     for (const auto &truck : trucks) {
         std::cout << "Truck from (" << truck.source.x << ", " << truck.source.y << ") to ("
                   << truck.destination.x << ", " << truck.destination.y << ") at time "
-                  << truck.outTime << " with crates: " << truck.crates << " destinationWarehouse: " << truck.destinationWarehouse << std::endl;
+                  << TimeConverter::timeToString(truck.outTime) << " with crates: " << truck.crates << " destinationWarehouse: " << truck.destinationWarehouse << std::endl;
     }
 }
 
