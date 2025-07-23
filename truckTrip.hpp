@@ -7,12 +7,12 @@
 #include "Time.hpp"
 
 struct truckTrip {
-    Point source;            // Source point
-    Point destination;       // Destination point
-    time_t outTime{};     // Departure time
-    time_t arrivalTime{}; // Arrival time
+    Point source;       // Source point
+    Point destination;  // Destination point
+    time_t outTime;     // Departure time
+    time_t arrivalTime; // Arrival time
     std::string destinationWarehouse; // Destination warehouse
-    int crates{};              // Number of crates to be transported
+    int crates;              // Number of crates to be transported
 
     truckTrip() = default;
     truckTrip(double srcX, double srcY, double destX, double destY, const std::string &out, const std::string &arr, int c, std::string destWarehouse)

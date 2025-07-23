@@ -10,29 +10,21 @@
 
 class TimeConverter {
 public:
-        static time_t stringToTime(const std::string& timeStr) {
-        int hours, minutes;
-        char colon;
-        std::istringstream iss(timeStr);
-        
-        if (iss >> hours >> colon >> minutes && colon == ':' && 
-            hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) {
-            
-            time_t now = time(NULL);
-            struct tm timeInfo = *localtime(&now);
-            timeInfo.tm_hour = hours;
-            timeInfo.tm_min = minutes;
-            timeInfo.tm_sec = 0;
-            return mktime(&timeInfo);
+    static time_t stringToTime(const std::string& timeStr) {
+        int hours = 0, minutes = 0;
+
+        if (sscanf(timeStr.c_str(), "%d:%d", &hours, &minutes) != 2) {
+            throw std::invalid_argument("Invalid time format: " + timeStr);
         }
-        return 0;
+        return hours * 3600 + minutes * 60;
     }
     
     static std::string timeToString(time_t time) {
-        struct tm* timeInfo = localtime(&time);
+        int hours = static_cast<int>(time / 3600);
+        int minutes = static_cast<int>((time % 3600) / 60);
         std::ostringstream oss;
-        oss << std::setfill('0') << std::setw(2) << timeInfo->tm_hour << ":"
-            << std::setfill('0') << std::setw(2) << timeInfo->tm_min;
+        oss << std::setfill('0') << std::setw(2) << hours << ":"
+            << std::setfill('0') << std::setw(2) << minutes;
         return oss.str();
     }
 };

@@ -23,20 +23,20 @@ void Vehicle::setPosition(const Point& pos) {
 }
 
 // Speed methods
-int Vehicle::getSpeed() const { 
+double Vehicle::getSpeed() const { 
     return trackbase.getSpeed(); 
 }
 
-void Vehicle::setSpeed(int speed) { 
+void Vehicle::setSpeed(double speed) { 
     trackbase.setSpeed(speed); 
 }
 
 // Course methods
-int Vehicle::getCourse() const { 
+double Vehicle::getCourse() const { 
     return trackbase.getCourse(); 
 }
 
-void Vehicle::setCourse(int course) { 
+void Vehicle::setCourse(double course) { 
     trackbase.setCourse(course); 
 }
 

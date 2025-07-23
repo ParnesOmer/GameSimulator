@@ -31,11 +31,11 @@ class Vehicle : public Sim_obj {
         void setPosition(double x, double y);
         void setPosition(const Point& pos);
         
-        int getSpeed() const;
-        void setSpeed(int speed);
+        double getSpeed() const;
+        void setSpeed(double speed);
         
-        int getCourse() const;
-        void setCourse(int course);
+        double getCourse() const;
+        void setCourse(double course);
         void setCourse(const Point& destination);
         
         void updatePosition();
@@ -46,7 +46,7 @@ class Vehicle : public Sim_obj {
         
         std::string getState() const override;
         void update() override = 0;
-        std::string BroadcastState() const override = 0;
+        std::string broadcastState() const override = 0;
         
     protected:
         Trackbase trackbase;

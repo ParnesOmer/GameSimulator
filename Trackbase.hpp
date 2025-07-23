@@ -20,15 +20,15 @@ class Trackbase {
 
         // Getters
         const Point& getPosition() const { return position; }
-        int getCourse() const            { return course; }
-        int getSpeed() const             { return speed; }
+        double getCourse() const            { return course; }
+        double getSpeed() const             { return speed; }
 
         // Setters
         void setPosition(double x, double y);
         void setPosition(const Point& pos);
-        void setCourse(int course);
+        void setCourse(double course);
         void setCourse(const Point& destination);
-        void setSpeed(int speed);
+        void setSpeed(double speed);
 
         // Setup Speed and Course by Time and Destination point.
         void setupByTime(time_t leave_time, const Point& destination, time_t arrive_time);
@@ -40,8 +40,8 @@ class Trackbase {
 
     private:
         Point position;
-        int course;
-        int speed;  // km/h
+        double course;
+        double speed;  // km/h
 };
 
 #endif // TRACKBASE_HPP

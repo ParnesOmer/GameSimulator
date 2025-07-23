@@ -15,7 +15,12 @@ Model::~Model()  = default;
 
 void Model::incrementTime() { time += SECONDS_PER_HOUR; }
 time_t Model::getTime() const { return time; }
-time_t Model::peekNextTime() { return time + SECONDS_PER_HOUR; }
+time_t Model::peekNextTime() const { return time + SECONDS_PER_HOUR; }
+
+// ticks are 1 hour
+std::string Model::getGameTick() const {
+    return std::to_string(static_cast<int>(time / SECONDS_PER_HOUR));
+}
 
 
 std::vector<std::string> Model::parseLine(const std::string &line) const {
@@ -194,32 +199,31 @@ void Model::addTripToTruck(std::string source, std::string outTime, std::vector<
     }
 }
 
-void Model::createTruck(std::vector<truckTrip> trucks) {
-    std::cout << "Creating trucks:" << std::endl;
-    for (const auto &truck : trucks) {
-        std::cout << "Truck from (" << truck.source.x << ", " << truck.source.y << ") to ("
-                  << truck.destination.x << ", " << truck.destination.y << ") at time "
-                  << TimeConverter::timeToString(truck.outTime) << " with crates: " << truck.crates << " destinationWarehouse: " << truck.destinationWarehouse << std::endl;
-    }
+void Model::createTruck(std::string& truck_name, std::vector<truckTrip>& truck_trips) {
+    Point& pos = truck_trips[0].source;
+    trucks.emplace(truck_name, Truck(truck_name, pos, std::move(truck_trips)));
 }
 
 void Model::printWarehouses() const {
     for (const auto &warehouse : warehouses) {
-        std::cout << "Warehouse: " << warehouse.second.getName() << ", Position: ("
-                  << warehouse.second.getPosition().x << ", "
-                  << warehouse.second.getPosition().y << "), Crates: "
-                  << warehouse.second.getState() << std::endl;
+        std::cout << warehouse.second.broadcastState() << std::endl;
     }
 }
 
 void Model::printTrucks() const {
-    for (const auto &warehouse : warehouses) {
-        std::cout << "Warehouse: " << warehouse.second.getName() << ", Position: ("
-                  << warehouse.second.getPosition().x << ", "
-                  << warehouse.second.getPosition().y << "), Crates: "
-                  << warehouse.second.getState() << std::endl;
+    for (const auto &truck : trucks) {
+        std::cout << truck.second.broadcastState() << std::endl;
     }
 }
 
+void Model::advanceAndUpdate() {
 
+    for (auto& truck : trucks) {
+        Truck& crr_truck = truck.second;
+
+        crr_truck.update();         // Update truck's state for the new time
+        std::cout << crr_truck.broadcastState() << std::endl; // Print or broadcast the truck's state
+        incrementTime(); // Advances time by 1 hour
+    }
+}
 

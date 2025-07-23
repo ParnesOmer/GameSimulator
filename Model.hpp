@@ -10,11 +10,11 @@
 #include <fstream>
 #include <iostream>
 #include <unordered_map>
-#include "Exceptions.hpp"
+#include "Truck.hpp"
 #include "Warehouse.hpp"
 #include "truckTrip.hpp"
-#include "Truck.hpp"
 #include "Trackbase.hpp"
+#include "Exceptions.hpp"
 
 class Model {
 public:
@@ -27,8 +27,11 @@ public:
 
     //getters and setters
     time_t getTime() const;
-    time_t peekNextTime();
+    time_t peekNextTime() const;
     void incrementTime();
+    std::string getGameTick() const;
+
+    void advanceAndUpdate();
 
     /// Parses the depot file and returns a vector of tuples containing warehouse data(name, x, y, amount).
     std::vector<std::tuple<std::string, double, double, int>> setDepotFile(const std::string &depotFile) const;
@@ -38,7 +41,7 @@ public:
     /// Parses the truck file and returns a vector of tuples containing truck data(sourceX, sourceY, destinationX, destinationY, outTime, arrivalTime, crates).
     std::vector<truckTrip> setTruckFile(const std::string &truckFile);
     /// Creates trucks based on the provided vector of tuples.
-    void createTruck(std::vector<truckTrip> trucks);
+    void createTruck(std::string& truck_name, std::vector<truckTrip>& truck_trips);
 
     void printWarehouses() const;
     void printTrucks() const;
@@ -49,6 +52,7 @@ private:
 
     time_t time = 0;
     std::unordered_map<std::string, Warehouse> warehouses;
+    std::unordered_map<std::string, Truck> trucks;
     std::vector<std::string> parseLine(const std::string &line) const;
     void addTripToTruck(std::string source, std::string outTime, std::vector<std::string> columns, vector<truckTrip> &trucks);
 };

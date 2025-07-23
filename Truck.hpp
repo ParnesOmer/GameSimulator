@@ -5,14 +5,13 @@
 #include <vector>
 #include "Vehicle.hpp"
 #include "truckTrip.hpp"
-#include "Model.hpp"
 
 class Truck : public Vehicle {
     public:
-        Truck(std::string obj_name, const Point& pos, const std::vector<truckTrip>& trips): Vehicle(std::move(obj_name), pos), trips(trips), trip_index(0){
+        Truck(std::string obj_name, const Point& pos, const std::vector<truckTrip>& trips): Vehicle(obj_name, pos), trips(trips){
             setupTruck();
         };
-        Truck(std::string obj_name, const Point& pos, int crates): Vehicle(std::move(obj_name), pos), trips(std::vector<truckTrip>()), trip_index(0), crates(crates) {};
+        Truck(std::string obj_name, const Point& pos, int crates): Vehicle(std::move(obj_name), pos), trips(std::vector<truckTrip>()), crates(crates) {};
         Truck(const Truck& other) = default;
         Truck& operator=(const Truck& other) = default;
         Truck(Truck&& other) = default;
@@ -24,10 +23,9 @@ class Truck : public Vehicle {
         void unloadCrates();
 
         const truckTrip& getCurrentTrip() const;
-        void setTrips(const std::vector<truckTrip>& trips);
 
         void update() override;
-        std::string BroadcastState() const override;
+        std::string broadcastState() const override;
 
     private:
         int trip_index;
