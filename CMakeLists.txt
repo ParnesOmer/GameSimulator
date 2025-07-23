@@ -9,4 +9,7 @@ add_executable(GameSimulator
                Controller.cpp
                Warehouse.cpp
                Trackbase.cpp
+               Truck.cpp
+               Model.cpp
+               Vehicle.cpp
                )

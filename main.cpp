@@ -1,7 +1,5 @@
 #include <iostream>
 #include "Controller.hpp"
-#include "Geometry.hpp"
-
 
 int main(int argc, char* argv[]) {
     Controller controller;

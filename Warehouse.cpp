@@ -10,7 +10,7 @@ std::string Warehouse::getState() const {
     return std::to_string(total_crates);
 }
 
-std::string Warehouse::BroadcastState() const {
+std::string Warehouse::broadcastState() const {
     return "Warehouse " + getName() + " at position " + position.toString() + ", Inventory: " + std::to_string(total_crates);
 }
 

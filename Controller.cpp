@@ -46,10 +46,10 @@ void Controller::parseArguments(int argc, char **argv) {
     model.createWarehouse(warehouses);
 
     // Analyze the truck files
-    for (const auto &truckFile : truckFiles) {
-        std::vector<truckTrip> trucks = model.setTruckFile(truckFile);
+    for (auto &truckFile : truckFiles) {
+        std::vector<truckTrip> truck = model.setTruckFile(truckFile);
         // Create the trucks objects in the model
-        model.createTruck(trucks);
+        model.createTruck(truckFile,truck);
     }
 
 }
@@ -61,7 +61,7 @@ void Controller::run(int argc, char **argv) {
     Model &model = Model::getInstance();
 
     for(;;){
-        std::cout << "Time " << model.getTime() << ": Enter command: ";
+        std::cout << "Time " << model.getGameTick() << ": Enter command: ";
         std::getline(std::cin, line);
 
         if(line.empty()) continue;
@@ -76,7 +76,7 @@ void Controller::run(int argc, char **argv) {
 
 void Controller::executeCommand(const std::string &line) {
     Model &model = Model::getInstance();
-    if(line == "exit") {
+    if (line == "exit") {
         std::cout << "Exiting the game simulator." << std::endl;
         exit(0);
     } else if (line == "print") {
@@ -84,6 +84,8 @@ void Controller::executeCommand(const std::string &line) {
         std::cout << "Printing current state..." << std::endl;
         model.printWarehouses();
         model.printTrucks();
+    } else if (line == "go"){
+        model.advanceAndUpdate();
     } else {
         // Handle other commands, e.g., loading data, processing input, etc.
         std::cout << "Executing command: " << line << std::endl;

@@ -1,7 +1,7 @@
-#include "Sim_obj.hpp"
-
 #ifndef WAREHOUSE_HPP
 #define WAREHOUSE_HPP
+
+#include "Sim_obj.hpp"
 
 class Warehouse : public Sim_obj {
     public:
@@ -13,7 +13,7 @@ class Warehouse : public Sim_obj {
         const Point& getPosition() const override;
         std::string getState() const override;
 
-        std::string BroadcastState() const override;
+        std::string broadcastState() const override;
         void update() override;
 
     private:

@@ -1,9 +1,5 @@
-//
-// Created by omer on 6/23/2025.
-//
-
-#ifndef GAMESIMULATOR_CONTRILLER_HPP
-#define GAMESIMULATOR_CONTRILLER_HPP
+#ifndef GAMESIMULATOR_CONTROLLER_HPP
+#define GAMESIMULATOR_CONTROLLER_HPP
 #include <iostream>
 #include <vector>
 #include "Model.hpp"
