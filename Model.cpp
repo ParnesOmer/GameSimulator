@@ -216,6 +216,12 @@ void Model::printTrucks() const {
     }
 }
 
+void Model::printTroopers() const {
+    for (const auto& trooper : troopers) {
+        std::cout << trooper.second.broadcastState() << std::endl;
+    }
+}
+
 void Model::advanceAndUpdate() {
 
     for (auto& truck : trucks) {
@@ -223,7 +229,35 @@ void Model::advanceAndUpdate() {
 
         crr_truck.update();         // Update truck's state for the new time
         std::cout << crr_truck.broadcastState() << std::endl; // Print or broadcast the truck's state
-        incrementTime(); // Advances time by 1 hour
     }
+    
+    for (auto& trooper : troopers) {
+        StateTrooper& crr_trooper = trooper.second;
+        crr_trooper.update();
+        std::cout << crr_trooper.broadcastState() << std::endl;
+    }
+    
+    incrementTime();
 }
+
+void Model::createTrooper(const std::string& trooperName, const std::string& startWarehouse) {
+    // Check name length
+    if (trooperName.length() > 12) {
+        throw std::invalid_argument("Trooper name too long (max 12 characters)");
+    }
+    
+    // Check if warehouse exists
+    auto it = warehouses.find(startWarehouse);
+    if (it == warehouses.end()) {
+        throw std::invalid_argument("Invalid warehouse name: " + startWarehouse);
+    }
+    
+    // Create and add trooper
+    troopers.emplace(trooperName, StateTrooper(trooperName, startWarehouse));
+}
+
+const std::unordered_map<std::string, Warehouse>& Model::getWarehouses() const {
+    return warehouses;
+}
+
 

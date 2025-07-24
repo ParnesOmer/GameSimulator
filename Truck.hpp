@@ -31,7 +31,6 @@ class Truck : public Vehicle {
         int trip_index;
         std::vector<truckTrip> trips;
         int crates;
-        DestinationType destination_type;
         truckTrip current_trip;
 
 

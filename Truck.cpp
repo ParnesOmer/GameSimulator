@@ -4,7 +4,7 @@
 void Truck::setupTruck() {
     trackbase.setPosition(trips[0].source);
     countCrates();
-    destination_type = DestinationType::WAREHOUSE;
+    destinationType = DestinationType::WAREHOUSE;
     state = VehicleState::STOPPED;
 }
 
@@ -24,7 +24,7 @@ void Truck::loadTrip() {
                   << ", arrivalTime=" << current_trip.arrivalTime << std::endl;
 
         trackbase.setupByTime(current_trip.outTime, current_trip.destination, current_trip.arrivalTime);
-        destination_type = DestinationType::WAREHOUSE;
+        destinationType = DestinationType::WAREHOUSE;
     }
 }
 
@@ -34,7 +34,7 @@ void Truck::moveToNextTrip() {
         loadTrip();
     }else{
         state = VehicleState::PARKED;
-        destination_type = DestinationType::None;
+        destinationType = DestinationType::None;
     }
 }
 
@@ -119,7 +119,7 @@ std::string Truck::broadcastState() const {
     std::ostringstream oss;
     std::string state = getState();
     oss << "Truck " << getName() << " at " << getPosition().toString();
-    if (destination_type == DestinationType::WAREHOUSE) {
+    if (destinationType == DestinationType::WAREHOUSE) {
         oss << ", Heading to " << current_trip.destinationWarehouse;
     }
     oss << ", State: " << state;

@@ -19,7 +19,7 @@ public:
 
   void parseArguments(int argc, char* argv[]);
   void executeCommand(const std::string &line);
-
+  void parseVehicleCreation(const std::string& line);
 	/// creates View object, runs the program by accepting user commands, then destroys View object
 	void run(int argc, char **argv);
 

@@ -54,6 +54,30 @@ void Controller::parseArguments(int argc, char **argv) {
 
 }
 
+void Controller::parseVehicleCreation(const std::string& line) {
+    std::vector<std::string> columns = Model::getInstance().parseLine(line);
+    
+    // Check if we have exactly 3 arguments: vehicle_name, vehicle_type, warehouse_name
+    if (columns.size() != 3) {
+        throw std::invalid_argument("Invalid vehicle creation format. Expected: vehicle_name,vehicle_type,warehouse_name");
+    }
+    
+    std::string vehicleName = columns[0];
+    std::string vehicleType = columns[1];
+    std::string warehouseName = columns[2];
+    
+    // Check if it's a State_trooper
+    if (vehicleType == "State_trooper") {
+        try {
+            Model::getInstance().createTrooper(vehicleName, warehouseName);
+        } catch (const std::exception& e) {
+            std::cerr << "Error creating StateTrooper: " << e.what() << std::endl;
+        }
+    } else {
+        throw std::invalid_argument("Unknown vehicle type: " + vehicleType);
+    }
+}
+
 void Controller::run(int argc, char **argv) {
     parseArguments(argc, argv);
     std::cout << "Game Simulator started." << std::endl;
@@ -77,17 +101,17 @@ void Controller::run(int argc, char **argv) {
 void Controller::executeCommand(const std::string &line) {
     Model &model = Model::getInstance();
     if (line == "exit") {
-        std::cout << "Exiting the game simulator." << std::endl;
         exit(0);
     } else if (line == "print") {
-        // Here you would call a method to print the current state of the model
-        std::cout << "Printing current state..." << std::endl;
         model.printWarehouses();
         model.printTrucks();
+        model.printTroopers();
     } else if (line == "go"){
         model.advanceAndUpdate();
+    } else if (line.substr(0, 6) == "create") {
+        std::string vehicleData = line.substr(7); // Remove "create " prefix
+        parseVehicleCreation(vehicleData);
     } else {
-        // Handle other commands, e.g., loading data, processing input, etc.
-        std::cout << "Executing command: " << line << std::endl;
+        std::cout << "Invalid command" << std::endl;
     }
 }

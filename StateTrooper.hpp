@@ -1,22 +1,27 @@
-#ifndef STATE_TROOPER_HPP
-#define STATE_TROOPER_HPP
+#ifndef STATETROOPER_HPP
+#define STATETROOPER_HPP
 
 #include "Vehicle.hpp"
-
+#include <vector>
+#include <string>
 
 class StateTrooper : public Vehicle {
-    public:
-        StateTrooper(std::string obj_name, const Point& pos): Vehicle(obj_name, pos) {};
-        ~StateTrooper() = default;
+public:
+    StateTrooper(const std::string& name, const std::string& startWarehouse);
 
-        void update() override;
-        std::string BroadcastState() const override;
-        
-    private:
-        std::string destination;
-        
+    void update() override;
+    std::string broadcastState() const override;
+
+private:
+    std::string startWarehouseName;
+    Point startWarehousePos;
+    std::vector<std::string> warehousesToVisit;
+    int currentTargetIdx;
+    bool returningHome = false;
+
+    void findClosestWarehouse();
+    void moveToNextWarehouse();
+    void setupWarehousesAndPosition(const std::string& startWarehouse);
 };
 
-
-
-#endif
+#endif // STATETROOPER_HPP

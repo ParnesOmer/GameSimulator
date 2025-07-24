@@ -12,6 +12,7 @@
 #include <unordered_map>
 #include "Truck.hpp"
 #include "Warehouse.hpp"
+#include "StateTrooper.hpp"
 #include "truckTrip.hpp"
 #include "Trackbase.hpp"
 #include "Exceptions.hpp"
@@ -31,21 +32,26 @@ public:
     void incrementTime();
     std::string getGameTick() const;
 
-    void advanceAndUpdate();
+    void advanceAndUpdate(); // TODO: for testing
 
     /// Parses the depot file and returns a vector of tuples containing warehouse data(name, x, y, amount).
     std::vector<std::tuple<std::string, double, double, int>> setDepotFile(const std::string &depotFile) const;
-    /// Creates warehouses based on the provided vector of tuples.
-    void createWarehouse(std::vector<std::tuple<std::string, double, double, int>> warehouses);
 
     /// Parses the truck file and returns a vector of tuples containing truck data(sourceX, sourceY, destinationX, destinationY, outTime, arrivalTime, crates).
     std::vector<truckTrip> setTruckFile(const std::string &truckFile);
     /// Creates trucks based on the provided vector of tuples.
     void createTruck(std::string& truck_name, std::vector<truckTrip>& truck_trips);
+    void createTrooper(const std::string& trooperName, const std::string& startWarehouse);
+    /// Creates warehouses based on the provided vector of tuples.
+    void createWarehouse(std::vector<std::tuple<std::string, double, double, int>> warehouses);
 
+
+    const std::unordered_map<std::string, Warehouse>& getWarehouses() const;
     void printWarehouses() const;
     void printTrucks() const;
+    void printTroopers() const;
 
+    std::vector<std::string> parseLine(const std::string &line) const;
 private:
     Model();
     ~Model();
@@ -53,7 +59,7 @@ private:
     time_t time = 0;
     std::unordered_map<std::string, Warehouse> warehouses;
     std::unordered_map<std::string, Truck> trucks;
-    std::vector<std::string> parseLine(const std::string &line) const;
+    std::unordered_map<std::string, StateTrooper> troopers;
     void addTripToTruck(std::string source, std::string outTime, std::vector<std::string> columns, vector<truckTrip> &trucks);
 };
 
