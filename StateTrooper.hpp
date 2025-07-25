@@ -1,5 +1,5 @@
-#ifndef STATETROOPER_HPP
-#define STATETROOPER_HPP
+#ifndef STATE_TROOPER_HPP
+#define STATE_TROOPER_HPP
 
 #include "Vehicle.hpp"
 #include <vector>
@@ -8,7 +8,6 @@
 class StateTrooper : public Vehicle {
 public:
     StateTrooper(const std::string& name, const std::string& startWarehouse);
-
     void update() override;
     std::string broadcastState() const override;
 
@@ -19,9 +18,9 @@ private:
     int currentTargetIdx;
     bool returningHome = false;
 
+    void setupWarehousesAndPosition(const std::string& startWarehouse);
     void findClosestWarehouse();
     void moveToNextWarehouse();
-    void setupWarehousesAndPosition(const std::string& startWarehouse);
 };
 
-#endif // STATETROOPER_HPP
+#endif // STATE_TROOPER_HPP

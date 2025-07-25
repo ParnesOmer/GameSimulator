@@ -21,7 +21,7 @@ void Trackbase::setSpeed(double speed) {
     if (speed <= NO_SPEED) {
         speed = NO_SPEED;
     }
-    this->speed = speed;
+    this->speed = speed / 100.0;
 }
 
 void Trackbase::setCourse(const Point& destination) {
@@ -46,11 +46,10 @@ void Trackbase::setupByTime(time_t leave_time, const Point& destination, time_t 
     // Calculate the speed
     double distance = Point::distance(position, destination);
     speed = (distance / time_diff) * SECONDS_PER_HOUR;
-    setSpeed(speed);
+    setSpeed(speed * 100.0);
 }
 
 void Trackbase::update(int time_factor_seconds) {
-    std::cout << "[DEBUG] COURSE: " << course << " SPEED: " << speed << std::endl;
     if (course == NO_COURSE || speed == NO_SPEED) {
         return;
     }
@@ -65,12 +64,10 @@ void Trackbase::update(int time_factor_seconds) {
     polar_v.r = distance_to_move;
 
     Cartesian_vector cartesian_v(polar_v);
-    std::cout << "[DEBUG] x axis addition: " << cartesian_v.delta_x << " y axis: " << cartesian_v.delta_y << std::endl;
 
     position.x += cartesian_v.delta_x;
     position.y += cartesian_v.delta_y;
 
-    std::cout << "[DEBUG] New position: " << position.toString() << std::endl;
 }
 
 bool Trackbase::isNearby(const Point& destination, double radius) const {

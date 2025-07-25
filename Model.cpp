@@ -1,15 +1,15 @@
-//
-// Created by omer on 6/23/2025.
-//
-
 #include "Model.hpp"
+#include <memory>
+#include "View.hpp"
 
 Model &Model::getInstance() {
     static Model instance; // Guaranteed to be created only once and thread-safe in C++11+
     return instance;
 }
 
-Model::Model() = default;
+Model::Model() : view(std::make_shared<View>()) {
+    // Guaranteed to be created only once and thread-safe in C++11+
+}
 
 Model::~Model()  = default;
 
@@ -77,8 +77,8 @@ std::vector<std::tuple<std::string, double, double, int>> Model::setDepotFile(co
         try {
             std::string x_str = columns[1].substr(open_paren + 1);
             x = std::stod(x_str);
-            std::string y_str = columns[2].substr(close_paren);
-            y = std::stod(columns[2]);
+            std::string y_str = columns[2].substr(0, close_paren);
+            y = std::stod(y_str);
             amount = std::stoi(columns[3]);
         }
         catch (const std::invalid_argument &e) {
@@ -107,6 +107,12 @@ void Model::createWarehouse(std::vector<std::tuple<std::string, double, double, 
     }
 }
 
+void Model::addCratesToWarehouse(const std::string& warehouseName, int crates) {
+    auto it = warehouses.find(warehouseName);
+    if (it != warehouses.end()) {
+        it->second.addCrates(crates);
+    }
+}
 
 std::vector<truckTrip> Model::setTruckFile(const string &truckFile) {
     std::ifstream file(truckFile);
@@ -127,8 +133,6 @@ std::vector<truckTrip> Model::setTruckFile(const string &truckFile) {
     }
     columns = parseLine(line);
     if(columns.size() != 2) {
-        std::cout << columns.size() << std::endl;
-        std::cout << columns[0] << columns[1] << std::endl;
         throw FileException(truckFile, 1);
     }
     source = columns[0];
@@ -204,37 +208,23 @@ void Model::createTruck(std::string& truck_name, std::vector<truckTrip>& truck_t
     trucks.emplace(truck_name, Truck(truck_name, pos, std::move(truck_trips)));
 }
 
-void Model::printWarehouses() const {
-    for (const auto &warehouse : warehouses) {
-        std::cout << warehouse.second.broadcastState() << std::endl;
-    }
-}
-
-void Model::printTrucks() const {
-    for (const auto &truck : trucks) {
-        std::cout << truck.second.broadcastState() << std::endl;
-    }
-}
-
-void Model::printTroopers() const {
-    for (const auto& trooper : troopers) {
-        std::cout << trooper.second.broadcastState() << std::endl;
-    }
-}
 
 void Model::advanceAndUpdate() {
 
     for (auto& truck : trucks) {
         Truck& crr_truck = truck.second;
 
-        crr_truck.update();         // Update truck's state for the new time
-        std::cout << crr_truck.broadcastState() << std::endl; // Print or broadcast the truck's state
+        crr_truck.update();
     }
     
     for (auto& trooper : troopers) {
         StateTrooper& crr_trooper = trooper.second;
         crr_trooper.update();
-        std::cout << crr_trooper.broadcastState() << std::endl;
+    }
+    
+    for (auto& chopper : choppers) {
+        Chopper& crr_chopper = chopper.second;
+        crr_chopper.update();
     }
     
     incrementTime();
@@ -256,8 +246,159 @@ void Model::createTrooper(const std::string& trooperName, const std::string& sta
     troopers.emplace(trooperName, StateTrooper(trooperName, startWarehouse));
 }
 
-const std::unordered_map<std::string, Warehouse>& Model::getWarehouses() const {
-    return warehouses;
+void Model::createChopper(const std::string& chopperName, const Point& startLocation) {
+    if (chopperName.length() > 12) {
+        throw std::invalid_argument("Chopper name too long (max 12 characters)");
+    }
+    
+    choppers.emplace(chopperName, Chopper(chopperName, startLocation));
 }
+
+void Model::printAllVehicles() const {
+    std::cout << "=== ALL VEHICLES INFORMATION ===" << std::endl;
+    
+    // Print warehouses
+    std::cout << "\n--- WAREHOUSES ---" << std::endl;
+    for (const auto& warehousePair : warehouses) {
+        const Warehouse& warehouse = warehousePair.second;
+        std::cout << warehouse.broadcastState() << std::endl;
+    }
+    
+    // Print trucks
+    std::cout << "\n--- TRUCKS ---" << std::endl;
+    for (const auto& truckPair : trucks) {
+        const Truck& truck = truckPair.second;
+        std::cout << truck.broadcastState() << std::endl;
+    }
+    
+    // Print StateTroopers
+    std::cout << "\n--- STATE TROOPERS ---" << std::endl;
+    for (const auto& trooperPair : troopers) {
+        const StateTrooper& trooper = trooperPair.second;
+        std::cout << trooper.broadcastState() << std::endl;
+    }
+    
+    // Print Choppers
+    std::cout << "\n--- CHOPPERS ---" << std::endl;
+    for (const auto& chopperPair : choppers) {
+        const Chopper& chopper = chopperPair.second;
+        std::cout << chopper.broadcastState() << std::endl;
+    }
+    
+    std::cout << "================================" << std::endl;
+}
+
+bool Model::isVehicleName(const std::string& name) const {
+    return trucks.count(name) || troopers.count(name) || choppers.count(name);
+}
+
+void Model::setVehicleCourse(const std::string& name, double course, double speed) {
+    if (choppers.count(name)) {
+        auto& chopper = choppers.at(name);
+        chopper.setCourse(course);
+        if (speed >= 0) chopper.setSpeed(speed);
+        if (chopper.getSpeed() > 0) chopper.setState(VehicleState::MOVING);
+    } else if (troopers.count(name)) {
+        troopers.at(name).setCourse(course);
+    } else if (trucks.count(name)) {
+        trucks.at(name).setCourse(course);
+    } else {
+        throw std::invalid_argument("No such vehicle: " + name);
+    }
+}
+
+void Model::setVehiclePosition(const std::string& name, const Point& pos, double speed) {
+    if (choppers.count(name)) {
+        auto& chopper = choppers.at(name);
+        chopper.setPosition(pos);
+        if (speed >= 0) chopper.setSpeed(speed);
+        if (chopper.getSpeed() > 0) chopper.setState(VehicleState::MOVING);
+    } else if (troopers.count(name)) {
+        troopers.at(name).setPosition(pos);
+    } else if (trucks.count(name)) {
+        trucks.at(name).setPosition(pos);
+    } else {
+        throw std::invalid_argument("No such vehicle: " + name);
+    }
+}
+
+void Model::setVehicleDestination(const std::string& name, const std::string& warehouseName) {
+    if (troopers.count(name)) {
+        const auto& warehouses = getWarehouses();
+        auto it = warehouses.find(warehouseName);
+        if (it == warehouses.end()) throw std::invalid_argument("Invalid warehouse: " + warehouseName);
+        troopers.at(name).setCourse(it->second.getPosition());
+    } else {
+        throw std::invalid_argument("Only StateTrooper can use warehouse destination");
+    }
+}
+
+void Model::setVehicleDestination(const std::string& name, const Point& dest) {
+    if (choppers.count(name)) {
+        choppers.at(name).setCourse(dest);
+    } else {
+        throw std::invalid_argument("Only Chopper can use point destination");
+    }
+}
+
+bool Model::vehicleAttack(const std::string& chopperName, const std::string& truckName) {
+    if (choppers.count(chopperName)) {
+        return choppers.at(chopperName).attack(truckName);
+    }
+    throw std::invalid_argument("No such chopper: " + chopperName);
+}
+
+void Model::stopVehicle(const std::string& name) {
+    Vehicle* v = nullptr;
+    if (choppers.count(name)) {
+        v = &choppers.at(name);
+    } else if (troopers.count(name)) {
+        v = &troopers.at(name);
+    } else if (trucks.count(name)) {
+        v = &trucks.at(name);
+    } else {
+        throw std::invalid_argument("No such vehicle: " + name);
+    }
+    v->setSpeed(0);
+    v->setState(VehicleState::STOPPED);
+}
+
+std::shared_ptr<View> Model::getView() {
+    return view;
+}
+
+void Model::fillMapObjects() {
+    // Clear the map first
+    view->clear();
+    
+    // Add all trucks to the map
+    for (const auto& truckPair : trucks) {
+        const Truck& truck = truckPair.second;
+        Point location = truck.getPosition();
+        view->insert_obj(location.x, location.y, truckPair.first.substr(0, 2));
+    }
+    
+    // Add all StateTroopers to the map
+    for (const auto& trooperPair : troopers) {
+        const StateTrooper& trooper = trooperPair.second;
+        Point location = trooper.getPosition();
+        view->insert_obj(location.x, location.y, trooperPair.first.substr(0, 2));
+    }
+    
+    // Add all Choppers to the map
+    for (const auto& chopperPair : choppers) {
+        const Chopper& chopper = chopperPair.second;
+        Point location = chopper.getPosition();
+        view->insert_obj(location.x, location.y, chopperPair.first.substr(0, 2));
+    }
+    
+    // Add all warehouses to the map
+    for (const auto& warehousePair : warehouses) {
+        const Warehouse& warehouse = warehousePair.second;
+        Point location = warehouse.getPosition();
+        view->insert_obj(location.x, location.y, warehousePair.first.substr(0, 2));
+    }
+}
+
 
 

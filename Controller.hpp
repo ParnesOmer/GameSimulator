@@ -1,29 +1,29 @@
-#ifndef GAMESIMULATOR_CONTROLLER_HPP
-#define GAMESIMULATOR_CONTROLLER_HPP
-#include <iostream>
-#include <vector>
-#include "Model.hpp"
-#include "truckTrip.hpp"
-#include "Exceptions.hpp"
+#ifndef CONTROLLER_HPP
+#define CONTROLLER_HPP
 
-/**
- * Controller
- * This class is responsible for controlling the Model and View according to interactions
- * with the user.
-*/
+#include <string>
+#include "Model.hpp"
 
 class Controller {
-public:	
-	Controller();
-	~Controller();
+public:
+    Controller();
+    ~Controller();
 
-  void parseArguments(int argc, char* argv[]);
-  void executeCommand(const std::string &line);
-  void parseVehicleCreation(const std::string& line);
-	/// creates View object, runs the program by accepting user commands, then destroys View object
-	void run(int argc, char **argv);
+    void parseArguments(int argc, char **argv);
+    void run(int argc, char **argv);
+    void executeCommand(const std::string &line);
+    void parseVehicleCreation(const std::string& line);
 
 private:
+    // Sub-functions for executeCommand
+    void handleBasicCommands(const std::string& cmd, std::istringstream& iss);
+    void handleMapCommands(const std::string& cmd, std::istringstream& iss);
+    void handleVehicleCommands(const std::string& name, const std::string& command, std::istringstream& iss);
+    void handleVehicleCourse(const std::string& name, std::istringstream& iss);
+    void handleVehiclePosition(const std::string& name, std::istringstream& iss);
+    void handleVehicleDestination(const std::string& name, std::istringstream& iss);
+    void handleVehicleAttack(const std::string& name, std::istringstream& iss);
+    void handleVehicleStop(const std::string& name);
 };
 
-#endif //GAMESIMULATOR_CONTRILLER_HPP
+#endif // CONTROLLER_HPP

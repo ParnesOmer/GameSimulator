@@ -13,4 +13,5 @@ add_executable(GameSimulator
                Model.cpp
                Vehicle.cpp
                StateTrooper.cpp
+               Chopper.cpp
                )

@@ -1,15 +1,13 @@
 #include "Vehicle.hpp"
 
-// Constructor implementations
+// --- Constructors ---
 Vehicle::Vehicle(std::string obj_name): 
-    Sim_obj(obj_name), trackbase(Trackbase()), state(VehicleState::STOPPED), destinationType(DestinationType::None) {
-}
+    Sim_obj(obj_name), trackbase(Trackbase()), state(VehicleState::STOPPED), destinationType(DestinationType::None) {}
 
 Vehicle::Vehicle(std::string obj_name, const Point& pos): 
-    Sim_obj(obj_name), trackbase(Trackbase(pos)), state(VehicleState::STOPPED), destinationType(DestinationType::None) {
-}
+    Sim_obj(obj_name), trackbase(Trackbase(pos)), state(VehicleState::STOPPED), destinationType(DestinationType::None) {}
 
-// Position methods
+// --- Position Methods ---
 const Point& Vehicle::getPosition() const { 
     return trackbase.getPosition(); 
 }
@@ -22,7 +20,7 @@ void Vehicle::setPosition(const Point& pos) {
     trackbase.setPosition(pos.x, pos.y); 
 }
 
-// Speed methods
+// --- Speed Methods ---
 double Vehicle::getSpeed() const { 
     return trackbase.getSpeed(); 
 }
@@ -31,7 +29,7 @@ void Vehicle::setSpeed(double speed) {
     trackbase.setSpeed(speed); 
 }
 
-// Course methods
+// --- Course Methods ---
 double Vehicle::getCourse() const { 
     return trackbase.getCourse(); 
 }
@@ -44,13 +42,9 @@ void Vehicle::setCourse(const Point& destination) {
     trackbase.setCourse(destination); 
 }
 
-// Movement methods
+// --- Movement Methods ---
 void Vehicle::updatePosition() { 
     trackbase.update(); 
-}
-
-bool Vehicle::isNearby(const Point& destination, double radius) const { 
-    return trackbase.isNearby(destination, radius); 
 }
 
 void Vehicle::moveTo(const Point& destination) {
@@ -58,16 +52,20 @@ void Vehicle::moveTo(const Point& destination) {
 }
 
 void Vehicle::stop() {
-    setSpeed(0);
-    setCourse(-1);
+    setSpeed(NO_SPEED);
+    setCourse(NO_COURSE);
 }
 
-// State methods
+// --- State Methods ---
 std::string Vehicle::getState() const { 
     return vehicleStateToString(state); 
 }
 
-// Static private function implementation
+void Vehicle::setState(VehicleState newState){
+    this->state = newState;
+}
+
+// --- Static Helpers ---
 std::string Vehicle::vehicleStateToString(VehicleState state) {
     switch (state) {
         case VehicleState::STOPPED: return "Stopped";

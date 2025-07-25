@@ -4,6 +4,7 @@
 #include "Sim_obj.hpp"
 #include "Trackbase.hpp"
 
+// --- Enums ---
 enum class DestinationType {
     WAREHOUSE,
     Point,
@@ -17,45 +18,44 @@ enum class VehicleState {
     MOVING,
 };
 
+// --- Class Declaration ---
 class Vehicle : public Sim_obj {
-    public:
-        Vehicle(std::string obj_name);
-        Vehicle(std::string obj_name, const Point& pos);
-        virtual ~Vehicle() = default;
-        Vehicle(const Vehicle& other) = default;
-        Vehicle& operator=(const Vehicle& other) = default;
-        Vehicle(Vehicle&& other) = default;
-        Vehicle& operator=(Vehicle&& other) = default;
+public:
+    Vehicle(std::string obj_name);
+    Vehicle(std::string obj_name, const Point& pos);
+    virtual ~Vehicle() = default;
+    Vehicle(const Vehicle& other) = default;
+    Vehicle& operator=(const Vehicle& other) = default;
+    Vehicle(Vehicle&& other) = default;
+    Vehicle& operator=(Vehicle&& other) = default;
 
-        const Point& getPosition() const override;
-        void setPosition(double x, double y);
-        void setPosition(const Point& pos);
-        
-        double getSpeed() const;
-        void setSpeed(double speed);
-        
-        double getCourse() const;
-        void setCourse(double course);
-        void setCourse(const Point& destination);
-        
-        void updatePosition();
-        bool isNearby(const Point& destination, double radius) const;
-        
-        void moveTo(const Point& destination);
-        void stop();
-        
-        std::string getState() const override;
-        void update() override = 0;
-        std::string broadcastState() const override = 0;
-        
-    protected:
-        Trackbase trackbase;
-        VehicleState state;
-        DestinationType destinationType;
-        
-    private:
-        // Static private function declaration
-        static std::string vehicleStateToString(VehicleState state);
+    const Point& getPosition() const override;
+    void setPosition(double x, double y);
+    void setPosition(const Point& pos);
+
+    double getSpeed() const;
+    void setSpeed(double speed);
+
+    double getCourse() const;
+    void setCourse(double course);
+    void setCourse(const Point& destination);
+
+    void updatePosition();
+
+    void moveTo(const Point& destination);
+    void stop();
+    std::string getState() const override;
+    void setState(VehicleState newState);
+    void update() override = 0;
+    std::string broadcastState() const override = 0;
+
+protected:
+    Trackbase trackbase;
+    VehicleState state;
+    DestinationType destinationType;
+
+private:
+    static std::string vehicleStateToString(VehicleState state);
 };
 
 #endif // VEHICLE_HPP
